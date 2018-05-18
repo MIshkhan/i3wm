@@ -206,3 +206,4 @@ bindsym Mod4+Ctrl+l "exec i3lock -i Pictures/Wallpapers/wallpaper2.png -t -f"
 
 bindsym Mod4+plus  "exec amixer -c 1 -- sset Master playback 1dB+"
 bindsym Mod4+minus "exec amixer -c 1 -- sset Master playback 1dB-"
+
