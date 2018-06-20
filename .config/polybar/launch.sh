@@ -7,8 +7,10 @@ killall -q polybar
 while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 
 # Launch example bar
-polybar -r top & disown
-polybar -r bottom & disown
-compton
+# polybar -r top &
+polybar -r bottom & 
+compton &
+
+setxkbmap -option 'grp:ralt_rshift_toggle'
 
 echo "Bars launched..."
