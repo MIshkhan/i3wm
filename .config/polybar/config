@@ -1,9 +1,11 @@
 [bar/top]
-; monitor = VGA-1
+monitor = HDMI-2
 width = 100%
-height = 27
+height = 22            
 
-background = #00000000
+; background = #00000000
+; foreground = #ccffffff
+background = #11111111
 foreground = #ccffffff
 
 line-color = ${bar/bottom.background}
@@ -18,16 +20,17 @@ font-1 = MaterialIcons:size=10;0
 font-2 = Termsynu:size=8:antialias=false;-2
 font-3 = FontAwesome:size=10;0
 
-modules-left = powermenu mpd
-modules-right = keyboard volume wired-network date
+modules-left = powermenu
+modules-center = date
+modules-right = volume keyboard  
 
 [bar/bottom]
-; monitor = ${env:MONITOR:VGA-1}
-bottom = true
+monitor = VGA-1
+; bottom = true
 width = 100%
-height = 27
+height = 22
 
-background = ${bar/top.background}
+; background = ${bar/top.background}
 foreground = ${bar/top.foreground}
 
 line-color = ${bar/top.background}
@@ -46,9 +49,10 @@ font-4 = MaterialIcons:size=10;-1
 font-5 = Termsynu:size=8:antialias=false;0
 font-6 = WunconSiji:pixelsize=10;1
 
-modules-left = i3    
-modules-center = chrome music telegram
-modules-right = cpu temperature memory
+modules-left = i3 cpu memory   
+; modules-center = chrome music telegram
+modules-center = date chrome telegram tor
+modules-right = powermenu volume keyboard
 
 [module/keyboard]
 type = internal/xkeyboard
@@ -113,7 +117,7 @@ label = %gb_used%
 
 ; Only applies if <bar-used> is used
 bar-used-indicator =
-bar-used-width = 50
+bar-used-width = 30
 bar-used-foreground-0 = #55aa55
 bar-used-foreground-1 = #557755
 bar-used-foreground-2 = #f5a70a
@@ -155,8 +159,6 @@ ramp-volume-3 = 
 [module/powermenu]
 type = custom/menu
 
-format-padding = 5
-
 label-open = 
 label-close = 
 label-separator = /
@@ -174,7 +176,12 @@ menu-0-2-exec = shutdown -h now
 [module/chrome]
 type = custom/text
 content =  
-click-left = google-chrome-stable
+click-left = google-chrome-stable &
+
+[module/tor]
+type = custom/text
+content =  
+click-left = sh -c '"/home/ishkhan/Documents/tor-browser/tor-browser_en-US/Browser/start-tor-browser" --detach || ([ !  -x "/home/ishkhan/Documents/tor-browser/tor-browser_en-US/Browser/start-tor-browser" ] && "$(dirname "$*")"/Browser/start-tor-browser --detach)' dummy %k  &
 
 [module/music]
 type = custom/text
@@ -184,7 +191,12 @@ click-left =
 [module/telegram]
 type = custom/text
 content = 
-click-left = telegram-desktop
+click-left = telegram-desktop &
+
+[module/books]
+type = custom/text
+content = 
+click-left = 
 
 [module/clock]
 type = internal/date
@@ -204,58 +216,101 @@ warn-temperature = 40
 [module/i3]
 type = internal/i3
 
-format = <label-state> <label-mode>
+; Only show workspaces defined on the same output as the bar
+;
+; Useful if you want to show monitor specific workspaces
+; on different bars
+;
+; Default: false
+pin-workspaces = false
 
+; This will split the workspace name on ':'
+; Default: false
+strip-wsnumbers = true
+
+; Sort the workspaces by index instead of the default
+; sorting that groups the workspaces by output
+; Default: false
 index-sort = true
 
+; Create click handler used to focus workspace
+; Default: true
+enable-click = true
+
+; Create scroll handlers used to cycle workspaces
+; Default: true
+enable-scroll = false
+
+; Wrap around when reaching the first/last workspace
+; Default: true
+wrapping-scroll = false
+
+; Set the scroll cycle direction 
+; Default: true
+reverse-scroll = false
+
+; Use fuzzy (partial) matching on labels when assigning 
+; icons to workspaces
+; Example: code;♚ will apply the icon to all workspaces 
+; containing 'code' in the label
+; Default: false
+fuzzy-match = true
+
+; Available tags:
+;   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
+;   <label-mode> (default)
+format = <label-state> <label-mode>
+
+; Available tokens:
+;   %mode%
+; Default: %mode%
 label-mode = %mode%
 label-mode-padding = 2
 label-mode-background = #e60053
 
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
 label-focused = %index%
 label-focused-foreground = #ffffff
 label-focused-background = #3f3f3f
 label-focused-underline = #fba922
-label-focused-padding = 2
+label-focused-padding = 4
 
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
 label-unfocused = %index%
-label-unfocused-padding = 2
+label-unfocused-padding = 4
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
 label-visible = %index%
-
 label-visible-underline = #555555
-label-visible-padding = 2
+label-visible-padding = 4
 
-[module/mpd]
-type = internal/mpd
-format-online = <icon-prev> <icon-stop> <toggle> <icon-next>  <icon-repeat> <icon-random>  <bar-progress> <label-time>  <label-song>
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon%  %name%
+label-urgent = %index%
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-padding = 4
 
-icon-play = 
-icon-pause = 
-icon-stop = 
-icon-prev = 
-icon-next = 
-icon-random = 
-icon-repeat = 
-
-toggle-on-foreground =
-toggle-off-foreground = #55
-
-bar-progress-width = 45
-bar-progress-format = %{A4:mpdseek+2: A5:mpdseek-2:}%fill%%indicator%%empty%%{A A}
-bar-progress-indicator = |
-bar-progress-indicator-foreground = #ff
-bar-progress-indicator-font = 3
-bar-progress-fill = ─
-bar-progress-fill-foreground = #bb
-bar-progress-fill-font = 3
-bar-progress-empty = ─
-bar-progress-empty-font = 3
-bar-progress-empty-foreground = #44
-
-[module/wired-network]
-type = internal/network
-interface = eth1
-interval = 3.0
-
-label-connected =    %{T3}%local_ip%%{T-}
-label-disconnected-foreground = #66
+; Separator in between workspaces
+label-separator = |
+label-separator-padding = 2
+label-separator-foreground = #ffb52a
