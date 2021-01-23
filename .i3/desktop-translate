@@ -1,0 +1,2 @@
+#!/usr/bin/env bash
+notify-send  "$(xsel -o)" "$(wget -U "Mozilla/5.0" -qO - "http://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=ru&dt=t&q=$(xsel -o | sed "s/[\"'<>]//g")" | sed "s/,,,0]],,.*//g" | sed  "s/\bcce7c67b3f2439089dd6b428e0b83b88//g" | sed  "s/\ben//g" | awk -F'"' '{print $2, $6}')" 
