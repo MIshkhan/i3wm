@@ -190,3 +190,4 @@ bindsym $mod+q exec /media/ishkhan/Docs/Programs/desktop-translate
 # exec --no-startup-id feh --bg-center Pictures/Walls/bilodid.jpg
 exec setxkbmap -layout "us,ru(phonetic),am(phonetic)"  -option 'grp:alt_shift_toggle'
 exec nm-applet
+exec fluxgui
